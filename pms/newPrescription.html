@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PMS</title>
+  <link rel="stylesheet" href="assets/custom.css">
+
+
+  
+</head>
+<body>
+  <header id="topbar">
+    <h1>Patient Management System</h1>   
+    <div class="image-container"></div>
+    <img src="assets/logo.png" alt="Photo">
+  </div>
+  </header>
+<div class="app">
+  <aside id="sidebar" class="sidebar collapsed" aria-label="Primary sidebar">
+    <div class="top">
+    <img  class="logo" aria-hidden="true" src="assets/logo.png" alt="Photo">
+    </div>
+
+    <nav role="navigation" aria-label="Main navigation">
+      <div tabindex="0" class="nav-item" data-has-sub="false" role="link" aria-label="Dashboard">
+        <a href="index.html"><div class="icon">🏠</div>
+        <div class="label">Dashboard</div></a>
+      </div>
+
+      <div class="nav-item" role="button" tabindex="0" aria-expanded="false" data-has-sub="true" aria-controls="inventory-submenu">
+        <div class="icon">🏥</div>
+        <div class="label">Prescription</div>
+      </div>
+      <div id="inventory-submenu" class="submenu" aria-hidden="true">
+        <a href="newPrescription.html" tabindex="0">New Prescription</a>
+        <a href="searchPatientHisotry.html" tabindex="0">Search Patient History</a>
+      </div>
+
+      <div class="nav-item" role="button" tabindex="0" aria-expanded="false" data-has-sub="true" aria-controls="patient-submenu">
+        <div class="icon">🧑‍🦽</div>
+        <div class="label">Patient</div>
+      </div>
+      <div id="patient-submenu" class="submenu" aria-hidden="true">
+        <a href="addPatient.html" tabindex="0">Add Patient</a>
+        <a href="LaboratoryTest.html" tabindex="0">Laboratory Test</a>
+        <a href="" tabindex="0">Diseases</a>
+        <a href="medicine.html" tabindex="0">Medicine</a>
+      </div>
+
+      <div tabindex="0" class="nav-item" role="link" aria-label="Reports">
+        <div class="icon">📊</div>
+       <a href="Reports.html"> <div class="label">Reports</div></a>
+      </div>
+
+      <div tabindex="0" class="nav-item" role="link" aria-label="Settings">
+        <div class="icon">⚙️</div>
+        <div class="label">Settings</div>
+      </div>
+    </nav>
+  </aside>
+
+
+<main class="main" id="main">
+    <label style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; font-size: 20px;">New Prescription</label><br><br>
+    <div class="input-row">
+    <div class="input-group">
+        <label for="selectPatient">Select Patient</label>
+        <input type="text" id="selectPatient" placeholder="Select Patient" class="basic-input">
+    </div>
+
+    <div class="input-group">
+        <label for="visitDate">Visit Date</label>
+        <input type="text" id="visitDate" placeholder="Visit Date" class="basic-input">
+    </div>
+    </div>
+
+    <div class="input-row">
+    <div class="input-group">
+        <label for="bp">BP</label>
+        <input type="text" id="bp" placeholder="`BP" class="basic-input">
+    </div>
+    <div class="input-group">
+        <label for="weight">Weight</label>
+        <input type="text" id="weight" placeholder="Weight" class="basic-input">
+    </div>
+    </div>
+
+    <div class="input-row">
+    <div class="input-group">
+        <label for="nextVisitDate">Next Visit Date</label>
+        <input type="text" id="nextVisitDate" placeholder="Next Visit Date" class="basic-input">
+    </div>
+    <div class="input-group">
+        <label for="selectMedicine">Select Medicine</label>
+        <input type="text" id="selectMedicine" placeholder="Select Medicine" class="basic-input">
+    </div>
+    </div>
+    <div class="input-row">
+    <div class="input-group">
+        <label for="selectPacking">Select Packing</label>
+        <input type="text" id="selectPacking" placeholder="Select Packing" class="basic-input">
+    </div>
+    <div class="input-group">
+        <label for="Quantity">Quantity</label>
+        <input type="text" id="quantity" placeholder="Quantity" class="basic-input">
+    </div>
+  </div>
+    <div class="input-row">
+      <div class="input-group">
+        <label for="Dosage">Dosage</label>
+        <input type="text" id="dosage" placeholder="Dosage" class="basic-input">
+    </div>
+    <div class="input-group"><br>
+      <button class="btn">Save</button>
+    </div>
+    </div>
+
+
+
+  </main>
+
+</div> 
+<footer class="footer">
+    <p>© 2025 Zeeshan Khan. All Rights Reserved.</p>
+</footer>
+</body>
+<script>
+  (function(){
+  
+    // handle nav items that have submenus
+    const navButtons = document.querySelectorAll('.nav-item[role="button"]');
+    navButtons.forEach(btn => {
+      const controls = btn.getAttribute('aria-controls');
+      const submenu = controls ? document.getElementById(controls) : null;
+
+      const toggleSub = () => {
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!expanded));
+        if (submenu) {
+          submenu.classList.toggle('open', !expanded);
+          submenu.setAttribute('aria-hidden', String(expanded));
+        }
+      };
+
+      // click opens submenu
+      btn.addEventListener('click', toggleSub);
+      // keyboard support: Enter or Space toggles
+      btn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleSub();
+        }
+        // optional: left/right keys collapse/expand sidebar
+        if (e.key === 'ArrowLeft') {
+          document.getElementById('collapseBtn').click();
+        }
+        if (e.key === 'ArrowRight') {
+          const sb = document.getElementById('sidebar');
+          if (sb.classList.contains('collapsed')) document.getElementById('collapseBtn').click();
+        }
+      });
+    });
+
+    // close submenus when clicking outside (optional)
+    document.addEventListener('click', (e) => {
+      if (!sidebar.contains(e.target)) {
+        document.querySelectorAll('.submenu.open').forEach(sm => {
+          sm.classList.remove('open');
+          sm.setAttribute('aria-hidden','true');
+          const parentBtn = document.querySelector(`[aria-controls="${sm.id}"]`);
+          if (parentBtn) parentBtn.setAttribute('aria-expanded','false');
+        });
+      }
+    });
+
+  })();
+</script>
+
+</html>
