@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PMS</title>
+  <link rel="stylesheet" href="assets/custom.css">
+
+  <link rel="shortcut icon" href="assets/images/logo.png" />  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZFWi1hww3TbG9DrYMNHH08xKxWbXe_7g&libraries=places&callback=initMap"
+  async defer></script>
+
+  <script src="https://maps.googleapis.com/maps/api/place/nearbysearch/output?parameters"></script> 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0"></script>
+
+
+  
+</head>
+<body>
+  <header id="topbar">
+    <h1>Patient Management System</h1>   
+    <div class="image-container"></div>
+    <img src="assets/logo.png" alt="Photo">
+  </div>
+  </header>
+<div class="app">
+  <aside id="sidebar" class="sidebar collapsed" aria-label="Primary sidebar">
+    <div class="top">
+    <img  class="logo" aria-hidden="true" src="assets/logo.png" alt="Photo">
+    </div>
+
+    <nav role="navigation" aria-label="Main navigation">
+      <div tabindex="0" class="nav-item" data-has-sub="false" role="link" aria-label="Dashboard">
+        <a href="index.html"><div class="icon">🏠</div>
+        <div class="label">Dashboard</div></a>
+      </div>
+
+      <div class="nav-item" role="button" tabindex="0" aria-expanded="false" data-has-sub="true" aria-controls="inventory-submenu">
+        <div class="icon">🏥</div>
+        <div class="label">Prescription</div>
+      </div>
+      <div id="inventory-submenu" class="submenu" aria-hidden="true">
+        <a href="newPrescription.html" tabindex="0">New Prescription</a>
+        <a href="searchPatientHisotry.html" tabindex="0">Search Patient History</a>
+      </div>
+
+      <div class="nav-item" role="button" tabindex="0" aria-expanded="false" data-has-sub="true" aria-controls="patient-submenu">
+        <div class="icon">🧑‍🦽</div>
+        <div class="label">Patient</div>
+      </div>
+      <div id="patient-submenu" class="submenu" aria-hidden="true">
+        <a href="addPatient.html" tabindex="0">Add Patient</a>
+        <a href="LaboratoryTest.html" tabindex="0">Laboratory Test</a>
+        <a href="" tabindex="0">Diseases</a>
+        <a href="medicine.html" tabindex="0">Medicine</a>
+      </div>
+
+      <div tabindex="0" class="nav-item" role="link" aria-label="Reports">
+        <div class="icon">📊</div>
+       <a href="Reports.html"> <div class="label">Reports</div></a>
+      </div>
+
+      <div tabindex="0" class="nav-item" role="link" aria-label="Settings">
+        <div class="icon">⚙️</div>
+        <div class="label">Settings</div>
+      </div>
+    </nav>
+  </aside>
+
+
+  <main class="main" id="main">
+    <div class="input-row">
+
+  <!-- Charts start from here -->
+   <canvas id="myChart" style="width:100%;max-width:600px; height: 100px;"></canvas>
+    <!-- Calender start from here -->
+    <div class="calendar">
+    <div class="calendar-header">
+        <button id="prevMonth">←</button>
+        <h3 id="month-year"></h3>
+        <button id="nextMonth">→</button>
+    </div>
+
+    <div class="weekdays">
+        <div>Sun</div>
+        <div>Mon</div>
+        <div>Tue</div>
+        <div>Wed</div>
+        <div>Thu</div>
+        <div>Fri</div>
+        <div>Sat</div>
+    </div>
+
+    <div id="calendar-days" class="days"></div>
+</div>
+
+<!-- Table start from here -->
+<div class="table-container">
+  <table class="styled-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Date</th>
+        <th>Amount</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td>001</td>
+        <td>Zeeshan Khan</td>
+        <td><span class="badge success">Completed</span></td>
+        <td>2025-02-15</td>
+        <td>€120.00</td>
+      </tr>
+
+      <tr>
+        <td>002</td>
+        <td>Eoghan</td>
+        <td><span class="badge pending">Pending</span></td>
+        <td>2025-02-14</td>
+        <td>€90.00</td>
+      </tr>
+
+      <tr>
+        <td>003</td>
+        <td>Adam</td>
+        <td><span class="badge danger">Failed</span></td>
+        <td>2025-02-12</td>
+        <td>€60.00</td>
+      </tr>
+      <tr>
+        <td>004</td>
+        <td>Dylan</td>
+        <td><span class="badge success">Completed</span></td>
+        <td>2025-02-12</td>
+        <td>€60.00</td>
+      </tr>
+      <tr>
+        <td>005</td>
+        <td>Eivi</td>
+        <td><span class="badge pending">Pending</span></td>
+        <td>2025-02-12</td>
+        <td>€60.00</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<!-- table end -->
+
+</div>
+<div class="video-container">
+    <video controls>
+        <source src="assets/video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</div>
+<!-- Map start from here -->
+    <div id="map"></div>
+    <br><br><br><br>
+
+  </main>
+
+</div> 
+
+<footer class="footer">
+    <p>© 2025 Zeeshan Khan. All Rights Reserved.</p>
+</footer>
+
+</body>
+<script>
+// Start of charts
+  const xValues = ["Flu", "Cough", "Fever", "Chronic", "Diabetes"];
+const yValues = [55, 49, 44, 24, 15];
+const barColors = ["red", "green","blue","orange","brown"];
+
+const ctx = document.getElementById('myChart');
+
+new Chart(ctx, {
+  type: "bar",
+  data: {
+    labels: xValues,
+    datasets: [{
+      backgroundColor: barColors,
+      data: yValues
+    }]
+  },
+  options: {
+    plugins: {
+      legend: {display: false},
+      title: {
+        display: true,
+        text: "Diseases Summary",
+        font: {size: 16}
+      }
+    }
+  }
+});
+// end of charts
+// calender start
+  const monthYear = document.getElementById("month-year");
+const calendarDays = document.getElementById("calendar-days");
+
+let date = new Date();
+
+function renderCalendar() {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+
+    // Month names
+    const months = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+
+    monthYear.textContent = `${months[month]} ${year}`;
+
+    // Get first and last day
+    const firstDay = new Date(year, month, 1).getDay();
+    const lastDate = new Date(year, month + 1, 0).getDate();
+
+    calendarDays.innerHTML = "";
+
+    // Empty slots before day 1
+    for (let i = 0; i < firstDay; i++) {
+        calendarDays.innerHTML += `<div></div>`;
+    }
+
+    // Add days
+    for (let day = 1; day <= lastDate; day++) {
+        calendarDays.innerHTML += `<div>${day}</div>`;
+    }
+}
+
+document.getElementById("prevMonth").onclick = () => {
+    date.setMonth(date.getMonth() - 1);
+    renderCalendar();
+};
+
+document.getElementById("nextMonth").onclick = () => {
+    date.setMonth(date.getMonth() + 1);
+    renderCalendar();
+};
+
+renderCalendar();
+
+// calender end
+
+//Map start
+  function initMap() {
+    // Map location (example: Portlaoise Hospital, Ireland)
+    const hospital = { lat: 53.033, lng: -7.297 };
+
+    // Create map
+    const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 15,
+        center: hospital,
+    });
+
+    // Add Marker
+    const marker = new google.maps.Marker({
+        position: hospital,
+        map: map,
+        title: "Portlaoise Hospital",
+    });
+}
+  (function(){
+  
+    // handle nav items that have submenus
+    const navButtons = document.querySelectorAll('.nav-item[role="button"]');
+    navButtons.forEach(btn => {
+      const controls = btn.getAttribute('aria-controls');
+      const submenu = controls ? document.getElementById(controls) : null;
+
+      const toggleSub = () => {
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!expanded));
+        if (submenu) {
+          submenu.classList.toggle('open', !expanded);
+          submenu.setAttribute('aria-hidden', String(expanded));
+        }
+      };
+
+      // click opens submenu
+      btn.addEventListener('click', toggleSub);
+      // keyboard support: Enter or Space toggles
+      btn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleSub();
+        }
+        // optional: left/right keys collapse/expand sidebar
+        if (e.key === 'ArrowLeft') {
+          document.getElementById('collapseBtn').click();
+        }
+        if (e.key === 'ArrowRight') {
+          const sb = document.getElementById('sidebar');
+          if (sb.classList.contains('collapsed')) document.getElementById('collapseBtn').click();
+        }
+      });
+    });
+
+    // close submenus when clicking outside (optional)
+    document.addEventListener('click', (e) => {
+      if (!sidebar.contains(e.target)) {
+        document.querySelectorAll('.submenu.open').forEach(sm => {
+          sm.classList.remove('open');
+          sm.setAttribute('aria-hidden','true');
+          const parentBtn = document.querySelector(`[aria-controls="${sm.id}"]`);
+          if (parentBtn) parentBtn.setAttribute('aria-expanded','false');
+        });
+      }
+    });
+
+  })();
+
+  
+</script>
+
+</html>
